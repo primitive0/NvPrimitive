@@ -2,6 +2,7 @@
 vim.g.have_nerd_font = true
 vim.opt.number = true
 vim.opt.relativenumber = true
+vim.opt.colorcolumn = '81'
 vim.opt.mouse = 'a'
 vim.opt.showmode = false
 vim.opt.wrap = false
@@ -59,6 +60,7 @@ vim.pack.add {
   'https://github.com/tpope/vim-fugitive',
   'https://github.com/lewis6991/gitsigns.nvim',
   'https://github.com/nvim-treesitter/nvim-treesitter',
+  'https://github.com/ibhagwan/fzf-lua',
 }
 
 -- Modus theme
@@ -86,7 +88,7 @@ require('conform').setup {
     end
   end,
 }
-vim.keymap.set('', '<leader>cf', function()
+vim.keymap.set('', '<Leader>cf', function()
   require('conform').format { async = true }
 end, { desc = '[F]ormat buffer' })
 
@@ -101,3 +103,20 @@ vim.api.nvim_create_autocmd('FileType', {
     end
   end,
 })
+
+-- fzf-lua
+do
+  -- stylua: ignore start
+  local maps = {
+    { '<Leader><Leader>', 'files',     'Find files'     },
+    { '<Leader>,',        'buffers',   'Find buffers'   },
+    { '<Leader>/',        'live_grep', 'Search by grep' },
+  }
+  -- stylua: ignore end
+  for _, map in ipairs(maps) do
+    local keys, picker, desc = unpack(map)
+    vim.keymap.set('n', keys, function()
+      require('fzf-lua')[picker]()
+    end, { desc = desc })
+  end
+end
