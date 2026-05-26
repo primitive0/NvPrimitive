@@ -1,3 +1,4 @@
+-- Neovim options
 vim.g.have_nerd_font = true
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -30,6 +31,7 @@ vim.keymap.set('n', 'N', 'Nzz')
 -- vim.keymap.set({ 'n', 'x' }, 'c', '"_c')
 -- vim.keymap.set({ 'n', 'x' }, 'C', '"_C')
 
+-- Neovide
 if vim.g.neovide then
   vim.o.guifont = 'Iosevka:h12'
   vim.g.neovide_cursor_animation_length = 0
@@ -38,13 +40,28 @@ if vim.g.neovide then
   vim.g.neovide_hide_mouse_when_typing = true
 end
 
+-- Plugins
+vim.api.nvim_create_autocmd('PackChanged', {
+  pattern = 'nvim-treesitter',
+  desc = 'Run `:TSUpdate` after pack changed',
+  callback = function(e)
+    local kind = e.data.kind
+    if kind == 'install' or kind == 'update' then
+      local pack_name = e.data.spec.name
+      vim.cmd.packadd(pack_name)
+      vim.cmd.TSUpdate()
+    end
+  end,
+})
 vim.pack.add {
   'https://github.com/miikanissi/modus-themes.nvim',
   'https://github.com/stevearc/conform.nvim',
   'https://github.com/tpope/vim-fugitive',
   'https://github.com/lewis6991/gitsigns.nvim',
+  'https://github.com/nvim-treesitter/nvim-treesitter',
 }
 
+-- Modus theme
 require('modus-themes').setup {
   on_highlights = function(hl, c)
     hl['@keyword.function'] = { link = '@keyword' }
@@ -52,6 +69,7 @@ require('modus-themes').setup {
 }
 vim.cmd.colorscheme 'modus_vivendi'
 
+-- Automatic code formatting
 require('conform').setup {
   formatters_by_ft = {
     lua = { 'stylua' },
@@ -72,6 +90,8 @@ vim.keymap.set('', '<leader>cf', function()
   require('conform').format { async = true }
 end, { desc = '[F]ormat buffer' })
 
+-- Syntax highlighting via treesitter
+require('nvim-treesitter').install { 'cpp', 'rust', 'zig' }
 vim.api.nvim_create_autocmd('FileType', {
   callback = function(args)
     local filetype = vim.bo[args.buf].filetype
