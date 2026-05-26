@@ -41,6 +41,8 @@ end
 vim.pack.add {
   'https://github.com/miikanissi/modus-themes.nvim',
   'https://github.com/stevearc/conform.nvim',
+  'https://github.com/tpope/vim-fugitive',
+  'https://github.com/lewis6991/gitsigns.nvim',
 }
 
 require('modus-themes').setup {
