@@ -120,3 +120,16 @@ do
     end, { desc = desc })
   end
 end
+
+-- LSP
+vim.lsp.config('clangd', {
+  cmd = { 'clangd' },
+  filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
+  root_markers = {
+    '.clangd',
+    'compile_commands.json',
+    'compile_flags.txt',
+    '.git',
+  },
+})
+vim.lsp.enable 'clangd'
