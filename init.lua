@@ -23,14 +23,10 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.keymap.set('n', 'U', '<C-r>')
 vim.keymap.set('n', '<C-r>', '<Nop>')
-vim.keymap.set('n', '<C-d>', '<C-d>zz')
-vim.keymap.set('n', '<C-u>', '<C-u>zz')
-vim.keymap.set('n', 'n', 'nzz')
-vim.keymap.set('n', 'N', 'Nzz')
--- vim.keymap.set({ 'n', 'x' }, 'x', '"_x')
--- vim.keymap.set({ 'n', 'x' }, 'X', '"_X')
--- vim.keymap.set({ 'n', 'x' }, 'c', '"_c')
--- vim.keymap.set({ 'n', 'x' }, 'C', '"_C')
+vim.keymap.set({ 'n', 'x' }, 'x', '"_x')
+vim.keymap.set({ 'n', 'x' }, 'X', '"_X')
+vim.keymap.set({ 'n', 'x' }, 'c', '"_c')
+vim.keymap.set({ 'n', 'x' }, 'C', '"_C')
 
 -- Neovide
 if vim.g.neovide then
