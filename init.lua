@@ -51,7 +51,7 @@ vim.pack.add {
   'https://github.com/neogitorg/neogit',
   'https://github.com/lewis6991/gitsigns.nvim',
   'https://github.com/nvim-treesitter/nvim-treesitter',
-  'https://github.com/ibhagwan/fzf-lua',
+  'https://github.com/folke/snacks.nvim',
 }
 
 -- Modus theme
@@ -61,6 +61,20 @@ require('modus-themes').setup {
   end,
 }
 vim.cmd.colorscheme 'modus_vivendi'
+
+-- Snacks picker
+require('snacks').setup {
+  picker = {
+    enabled = true,
+    win = {
+      input = {
+        keys = {
+          ['<Esc>'] = { 'close', mode = { 'n', 'i' } },
+        },
+      },
+    },
+  },
+}
 
 -- Automatic code formatting
 require('conform').setup {
@@ -115,10 +129,10 @@ do
     { {'n','x'}, 'X',     '"_X'                 },
     { 'n',       '<Esc>', '<cmd>nohlsearch<CR>' },
 
-    { 'n', '<leader>.',        '<cmd>Ex<CR>'                                 },
-    { 'n', '<leader><leader>', function() require('fzf-lua').files()     end },
-    { 'n', '<leader>,',        function() require('fzf-lua').buffers()   end },
-    { 'n', '<leader>/',        function() require('fzf-lua').live_grep() end },
+    { 'n', '<leader>.',        '<cmd>Ex<CR>'                          },
+    { 'n', '<leader><leader>', function() Snacks.picker.files()   end },
+    { 'n', '<leader>,',        function() Snacks.picker.buffers() end },
+    { 'n', '<leader>/',        function() Snacks.picker.grep()    end },
 
     { 'n', '<leader>cf', function() require('conform').format{async=true} end },
 
