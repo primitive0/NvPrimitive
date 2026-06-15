@@ -19,14 +19,9 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 
+-- We must set leader early to ensure correct keymaps in plugins.
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
-vim.keymap.set('n', 'U', '<C-r>')
-vim.keymap.set('n', '<C-r>', '<Nop>')
-vim.keymap.set({ 'n', 'x' }, 'x', '"_x')
-vim.keymap.set({ 'n', 'x' }, 'X', '"_X')
-vim.keymap.set({ 'n', 'x' }, 'c', '"_c')
-vim.keymap.set({ 'n', 'x' }, 'C', '"_C')
 
 -- Neovide
 if vim.g.neovide then
@@ -84,9 +79,6 @@ require('conform').setup {
     end
   end,
 }
-vim.keymap.set('', '<Leader>cf', function()
-  require('conform').format { async = true }
-end, { desc = '[F]ormat buffer' })
 
 -- Syntax highlighting via treesitter
 require('nvim-treesitter').install { 'cpp', 'rust', 'zig' }
@@ -100,23 +92,6 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
--- fzf-lua
-do
-  -- stylua: ignore start
-  local maps = {
-    { '<Leader><Leader>', 'files',     'Find files'     },
-    { '<Leader>,',        'buffers',   'Find buffers'   },
-    { '<Leader>/',        'live_grep', 'Search by grep' },
-  }
-  -- stylua: ignore end
-  for _, map in ipairs(maps) do
-    local keys, picker, desc = unpack(map)
-    vim.keymap.set('n', keys, function()
-      require('fzf-lua')[picker]()
-    end, { desc = desc })
-  end
-end
-
 -- LSP
 vim.lsp.config('clangd', {
   cmd = { 'clangd' },
@@ -129,3 +104,30 @@ vim.lsp.config('clangd', {
   },
 })
 vim.lsp.enable 'clangd'
+
+-- Key mappings
+do
+  -- stylua: ignore start
+  local maps = {
+    { 'n',       'U',     '<C-r>'               },
+    { 'n',       '<C-r>', '<NOP>'               },
+    { {'n','x'}, 'x',     '"_x'                 },
+    { {'n','x'}, 'X',     '"_X'                 },
+    { 'n',       '<Esc>', '<cmd>nohlsearch<CR>' },
+
+    { 'n', '<leader>.',        '<cmd>Ex<CR>'                                 },
+    { 'n', '<leader><leader>', function() require('fzf-lua').files()     end },
+    { 'n', '<leader>,',        function() require('fzf-lua').buffers()   end },
+    { 'n', '<leader>/',        function() require('fzf-lua').live_grep() end },
+
+    { 'n', '<leader>cf', function() require('conform').format{async=true} end },
+
+    { 'n', '<leader>gg', '<cmd>Neogit<CR>' },
+  }
+  -- stylua: ignore end
+
+  for _, mapping in ipairs(maps) do
+    local mode, key, action, description = unpack(mapping)
+    vim.keymap.set(mode, key, action, { desc = description })
+  end
+end
