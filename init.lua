@@ -62,6 +62,11 @@ require('modus-themes').setup {
 }
 vim.cmd.colorscheme 'modus_vivendi'
 
+-- Набор на русском языке
+vim.opt.keymap = 'russian-jcukenwin'
+vim.opt.iminsert = 0
+vim.opt.imsearch = 0
+
 -- Snacks picker
 require('snacks').setup {
   picker = {
@@ -123,6 +128,7 @@ vim.lsp.enable 'clangd'
 do
   -- stylua: ignore start
   local maps = {
+    { {'i','c'}, '<C-l>', '<C-^>'               },
     { 'n',       'U',     '<C-r>'               },
     { 'n',       '<C-r>', '<NOP>'               },
     { {'n','x'}, 'x',     '"_x'                 },
