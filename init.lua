@@ -52,6 +52,7 @@ vim.pack.add {
   'https://github.com/lewis6991/gitsigns.nvim',
   'https://github.com/nvim-treesitter/nvim-treesitter',
   'https://github.com/folke/snacks.nvim',
+  'https://github.com/nvim-mini/mini.nvim',
 }
 
 -- Modus theme
@@ -80,6 +81,12 @@ require('snacks').setup {
     },
   },
 }
+
+-- mini.surround
+require('mini.surround').setup {}
+
+-- mini.pairs
+require('mini.pairs').setup {}
 
 -- Automatic code formatting
 require('conform').setup {
