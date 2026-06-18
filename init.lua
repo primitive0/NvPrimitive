@@ -88,6 +88,12 @@ require('mini.surround').setup {}
 -- mini.pairs
 require('mini.pairs').setup {}
 
+-- mini.ai
+require('mini.ai').setup {}
+
+-- mini.operators
+require('mini.operators').setup {}
+
 -- Automatic code formatting
 require('conform').setup {
   formatters_by_ft = {
