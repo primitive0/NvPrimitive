@@ -62,6 +62,107 @@ require('modus-themes').setup {
 }
 vim.cmd.colorscheme 'modus_vivendi'
 
+-- Statusline
+-- TODO: this section needs a refactoring and clean up
+vim.api.nvim_create_autocmd({ 'ModeChanged' }, {
+  group = vim.api.nvim_create_augroup('MyStatuslineRedrawMode', { clear = true }),
+  callback = function()
+    vim.cmd.redrawstatus()
+  end,
+})
+do
+  vim.api.nvim_set_hl(0, 'MyStatuslineBar', {
+    fg = '#2fafff',
+  })
+
+  local ctrl_v = vim.api.nvim_replace_termcodes('<C-v>', true, true, true)
+  local ctrl_s = vim.api.nvim_replace_termcodes('<C-s>', true, true, true)
+
+  -- stylua: ignore
+  local mode_names = {
+    -- TODO: refactor characters
+    n = 'Ω',    -- navigation / normal
+    no = '∗',   -- operator pending
+    nov = '∗',
+    noV = '∗',
+    ['no' .. ctrl_v] = '∗',
+    niI = 'Ω·ι',
+    niR = 'Ω·ρ',
+    niV = 'Ω·ν',
+    nt = 'τ·∇',
+
+    i = 'ζ', -- insert
+    ic = 'ζ',
+    ix = 'ζ',
+
+    v = '◉ ', -- visual
+    V = '◈ ', -- visual line
+    [ctrl_v] = '▣ ', -- visual block
+
+    s = '◉ ′', -- select
+    S = '◈ ′',
+    [ctrl_s] = '▣ ′',
+
+    R = 'ρ', -- replace
+    Rc = 'ρ',
+    Rx = 'ρ',
+
+    Rv = 'ρᵥ',
+    Rvc = 'ρᵥ',
+    Rvx = 'ρᵥ',
+
+    c = 'λ', -- command
+    cv = 'λ',
+    ce = 'λ',
+
+    r = '?',
+    rm = '…',
+    ['r?'] = '⁇',
+
+    ['!'] = 'λ', -- shell
+    t = 'τ', -- terminal
+  }
+
+  local function section_mode_riced()
+    local _, mode_hl = MiniStatusline.section_mode { trunc_width = 120 }
+    local raw_mode = vim.fn.mode(1)
+
+    return mode_names[raw_mode] or raw_mode:upper(), mode_hl
+  end
+
+  -- stylua: ignore
+  local function get_content_active()
+    local mode, mode_hl = section_mode_riced()
+    local git           = MiniStatusline.section_git({ trunc_width = 40 })
+    local diff          = MiniStatusline.section_diff({ trunc_width = 75 })
+    local diagnostics   = MiniStatusline.section_diagnostics({ trunc_width = 75 })
+    local lsp           = MiniStatusline.section_lsp({ trunc_width = 75 })
+    local filename      = MiniStatusline.section_filename({ trunc_width = 140 })
+    local fileinfo      = MiniStatusline.section_fileinfo({ trunc_width = 120 })
+    local location      = MiniStatusline.section_location({ trunc_width = 75 })
+    local search        = MiniStatusline.section_searchcount({ trunc_width = 75 })
+
+    return MiniStatusline.combine_groups({
+      '%#MyStatuslineBar#▍%* ',
+      { hl = mode_hl,                  strings = { mode } },
+      { hl = 'MiniStatuslineDevinfo',  strings = { git, diff, diagnostics, lsp } },
+      '%<',
+      { hl = 'MiniStatuslineFilename', strings = { filename } },
+      '%=',
+      { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
+      { hl = mode_hl,                  strings = { search, location } },
+    })
+  end
+
+  local statusline = require 'mini.statusline'
+  statusline.setup {
+    use_icons = vim.g.have_nerd_font,
+    content = {
+      active = get_content_active,
+    },
+  }
+end
+
 -- Набор на русском языке
 vim.opt.keymap = 'russian-jcukenwin'
 vim.opt.iminsert = 0
