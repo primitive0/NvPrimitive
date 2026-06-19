@@ -268,7 +268,7 @@ vim.lsp.enable 'clangd'
 
 -- Key mappings
 do
-  -- stylua: ignore start
+  -- stylua: ignore
   local maps = {
     { {'i','c'}, '<C-l>', '<C-^>'               },
     { 'n',       'U',     '<C-r>'               },
@@ -286,7 +286,6 @@ do
 
     { 'n', '<leader>gg', '<cmd>Neogit<CR>' },
   }
-  -- stylua: ignore end
 
   for _, mapping in ipairs(maps) do
     local mode, key, action, description = unpack(mapping)
