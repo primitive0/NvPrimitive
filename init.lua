@@ -268,6 +268,8 @@ vim.lsp.enable 'clangd'
 
 -- Key mappings
 do
+  local MiniBufremove = require 'mini.bufremove'
+
   -- stylua: ignore
   local maps = {
     { {'i','c'}, '<C-l>', '<C-^>'               },
@@ -276,6 +278,8 @@ do
     { {'n','x'}, 'x',     '"_x'                 },
     { {'n','x'}, 'X',     '"_X'                 },
     { 'n',       '<Esc>', '<cmd>nohlsearch<CR>' },
+
+    { 'n', '<leader>bd', function() MiniBufremove.delete() end },
 
     { 'n', '<leader>.',        '<cmd>Ex<CR>'                          },
     { 'n', '<leader><leader>', function() Snacks.picker.files()   end },
