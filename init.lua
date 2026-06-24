@@ -266,6 +266,14 @@ vim.lsp.config('clangd', {
 })
 vim.lsp.enable 'clangd'
 
+-- Autocommands
+vim.api.nvim_create_autocmd('TextYankPost', {
+  group = vim.api.nvim_create_augroup('my-highlight-yank', { clear = true }),
+  callback = function()
+    vim.highlight.on_yank()
+  end,
+})
+
 -- Key mappings
 do
   local MiniBufremove = require 'mini.bufremove'
