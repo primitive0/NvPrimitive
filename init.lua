@@ -32,6 +32,8 @@ if vim.g.neovide then
 end
 
 -- Plugins
+vim.cmd.packadd 'nvim.undotree'
+
 vim.api.nvim_create_autocmd('PackChanged', {
   pattern = 'nvim-treesitter',
   desc = 'Run `:TSUpdate` after pack changed',
