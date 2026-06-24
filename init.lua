@@ -287,6 +287,23 @@ do
     { {'n','x'}, 'X',     '"_X'                 },
     { 'n',       '<Esc>', '<cmd>nohlsearch<CR>' },
 
+    {
+      -- Insert newline above
+      'n', '[o',
+      function()
+        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+        vim.api.nvim_buf_set_lines(0, row - 1, row - 1, true, { '' })
+      end
+    },
+    {
+      -- Insert newline below
+      'n', ']o',
+      function()
+        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+        vim.api.nvim_buf_set_lines(0, row, row, true, { '' })
+      end
+    },
+
     { 'n', '<leader>bd', function() MiniBufremove.delete() end },
 
     { 'n', '<leader>.',        '<cmd>Ex<CR>'                          },
