@@ -289,6 +289,9 @@ do
     { {'n','x'}, 'x',     '"_x'                 },
     { {'n','x'}, 'X',     '"_X'                 },
     { 'n',       '<Esc>', '<cmd>nohlsearch<CR>' },
+    { 'x',       '>',     '>gv'                 },
+    { 'x',       '<',     '<gv'                 },
+    { 'x',       '=',     '=gv'                 },
 
     {
       -- Insert newline above
