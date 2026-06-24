@@ -229,6 +229,7 @@ require('mini.operators').setup {}
 require('conform').setup {
   formatters_by_ft = {
     lua = { 'stylua' },
+    php = { 'php_cs_fixer' },
   },
   default_format_opts = {
     lsp_format = 'fallback',
@@ -238,7 +239,7 @@ require('conform').setup {
     if disable_filetypes[vim.bo[bufnr].filetype] then
       return nil
     else
-      return { timeout_ms = 500 }
+      return { timeout_ms = 1000 }
     end
   end,
 }
