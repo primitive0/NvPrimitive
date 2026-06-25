@@ -281,6 +281,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 do
   local MiniBufremove = require 'mini.bufremove'
 
+  local function insert_newline_above()
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    vim.api.nvim_buf_set_lines(0, row - 1, row - 1, true, { '' })
+  end
+
+  local function insert_newline_below()
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    vim.api.nvim_buf_set_lines(0, row, row, true, { '' })
+  end
+
   -- stylua: ignore
   local maps = {
     { {'i','c'}, '<C-l>', '<C-^>'               },
@@ -293,22 +303,8 @@ do
     { 'x',       '<',     '<gv'                 },
     { 'x',       '=',     '=gv'                 },
 
-    {
-      -- Insert newline above
-      'n', '[o',
-      function()
-        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-        vim.api.nvim_buf_set_lines(0, row - 1, row - 1, true, { '' })
-      end
-    },
-    {
-      -- Insert newline below
-      'n', ']o',
-      function()
-        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-        vim.api.nvim_buf_set_lines(0, row, row, true, { '' })
-      end
-    },
+    { 'n', '[o', insert_newline_above },
+    { 'n', ']o', insert_newline_below },
 
     { 'n', '<leader>bd', function() MiniBufremove.delete() end },
 
