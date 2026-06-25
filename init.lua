@@ -291,6 +291,28 @@ do
     vim.api.nvim_buf_set_lines(0, row, row, true, { '' })
   end
 
+  local function yank_whole_buffer()
+    local reg = vim.v.register
+    if reg == '"' then
+      reg = '+'
+    end
+
+    local lines = vim.api.nvim_buf_get_lines(0, 0, -1, true)
+    vim.fn.setreg(reg, lines, 'l')
+
+    local line_count = #lines
+    local last_line = lines[line_count] or ''
+    vim.api.nvim_buf_set_mark(0, '[', 1, 0, {})
+    vim.api.nvim_buf_set_mark(0, ']', line_count, math.max(#last_line - 1, 0), {})
+    vim.hl.on_yank {
+      event = {
+        operator = 'y',
+        regtype = 'V',
+        regname = reg,
+      },
+    }
+  end
+
   -- stylua: ignore
   local maps = {
     { {'i','c'}, '<C-l>', '<C-^>'               },
@@ -307,6 +329,7 @@ do
     { 'n', ']o', insert_newline_below },
 
     { 'n', '<leader>bd', function() MiniBufremove.delete() end },
+    { 'n', '<leader>by', yank_whole_buffer                     },
 
     { 'n', '<leader>.',        '<cmd>Ex<CR>'                          },
     { 'n', '<leader><leader>', function() Snacks.picker.files()   end },
