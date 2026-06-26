@@ -315,38 +315,47 @@ do
 
   -- stylua: ignore
   local maps = {
-    { {'i','c'}, '<C-l>', '<C-^>'               },
-    { 'n',       'U',     '<C-r>'               },
-    { 'n',       '<C-r>', '<NOP>'               },
-    { {'n','x'}, 'x',     '"_x'                 },
-    { {'n','x'}, 'X',     '"_X'                 },
-    { 'n',       '<Esc>', '<cmd>nohlsearch<CR>' },
-    { 'x',       '>',     '>gv'                 },
-    { 'x',       '<',     '<gv'                 },
-    { 'x',       '=',     '=gv'                 },
-    { 'n', '<A-k>', '<cmd>m .-2<CR>' },
-    { 'n', '<A-j>', '<cmd>m .+1<CR>' },
+    -- Common
+    { 'n', '<leader>.',        '<cmd>Ex<CR>'                          },
+    { 'n', '<leader><leader>', function() Snacks.picker.files() end   },
+    { 'n', '<leader>,',        function() Snacks.picker.buffers() end },
+    { 'n', '<leader>/',        function() Snacks.picker.grep() end    },
 
-    { 'i', '<C-d>', '<C-o>de' },
-
-    { 'n', '[o', insert_newline_above },
-    { 'n', ']o', insert_newline_below },
-
+    -- Buffer
     { 'n', '<leader>bd', function() MiniBufremove.delete() end },
     { 'n', '<leader>by', yank_whole_buffer                     },
 
-    { 'n', '<leader>.',        '<cmd>Ex<CR>'                          },
-    { 'n', '<leader><leader>', function() Snacks.picker.files()   end },
-    { 'n', '<leader>,',        function() Snacks.picker.buffers() end },
-    { 'n', '<leader>/',        function() Snacks.picker.grep()    end },
+    -- Code
+    { 'n', '<leader>cf', function() require('conform').format({async=true}) end },
 
-    { 'n', '<leader>cf', function() require('conform').format{async=true} end },
-
+    -- Git
     { 'n', '<leader>gg', '<cmd>Neogit<CR>' },
+
+    -- Normal mode
+    { 'n', '<Esc>', '<cmd>nohlsearch<CR>' },
+    { 'n', 'U',     '<C-r>'               },
+    { 'n', '<C-r>', '<NOP>'               },
+    { 'n', '<A-k>', '<cmd>m .-2<CR>'      },
+    { 'n', '<A-j>', '<cmd>m .+1<CR>'      },
+    { 'n', '[o',    insert_newline_above  },
+    { 'n', ']o',    insert_newline_below  },
+
+    -- Insert mode
+    { 'i', '<C-d>', '<C-o>de' },
+
+    -- Visual mode
+    { 'x', '>', '>gv' },
+    { 'x', '<', '<gv' },
+    { 'x', '=', '=gv' },
+
+    { {'n','x'}, 'x', '"_x' },
+    { {'n','x'}, 'X', '"_X' },
+
+    { {'i','c'}, '<C-l>', '<C-^>' },
   }
 
   for _, mapping in ipairs(maps) do
-    local mode, key, action, description = unpack(mapping)
-    vim.keymap.set(mode, key, action, { desc = description })
+    local mode, key, action = unpack(mapping)
+    vim.keymap.set(mode, key, action)
   end
 end
