@@ -2,7 +2,6 @@
 vim.g.have_nerd_font = true
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.opt.colorcolumn = '81'
 vim.opt.mouse = 'a'
 vim.opt.showmode = false
 vim.opt.wrap = false
@@ -166,6 +165,15 @@ do
     },
   }
 end
+
+-- Set colorcolumn depending on textwidth
+vim.api.nvim_create_autocmd({ 'BufEnter', 'OptionSet' }, {
+  pattern = { '*', 'textwidth' },
+  callback = function()
+    local textwidth = vim.bo.textwidth
+    vim.wo.colorcolumn = textwidth > 0 and tostring(textwidth + 1) or ''
+  end,
+})
 
 -- Набор на русском языке
 vim.opt.keymap = 'russian-jcukenwin'
