@@ -325,6 +325,8 @@ do
     { 'x',       '<',     '<gv'                 },
     { 'x',       '=',     '=gv'                 },
 
+    { 'i', '<C-d>', '<C-o>de' },
+
     { 'n', '[o', insert_newline_above },
     { 'n', ']o', insert_newline_below },
 
