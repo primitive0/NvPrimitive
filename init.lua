@@ -66,76 +66,63 @@ require('modus-themes').setup {
 vim.cmd.colorscheme 'modus_vivendi'
 
 -- Statusline
--- TODO: this section needs a refactoring and clean up
-vim.api.nvim_create_autocmd({ 'ModeChanged' }, {
-  group = vim.api.nvim_create_augroup('MyStatuslineRedrawMode', { clear = true }),
-  callback = function()
-    vim.cmd.redrawstatus()
-  end,
-})
 do
+  -- This is required to show other modes, e.g. command pending mode.
+  vim.api.nvim_create_autocmd({ 'ModeChanged' }, {
+    group = vim.api.nvim_create_augroup('MyStatuslineRedrawMode', { clear = true }),
+    callback = function()
+      vim.cmd.redrawstatus()
+    end,
+  })
+
   vim.api.nvim_set_hl(0, 'MyStatuslineBar', {
     fg = '#2fafff',
   })
 
   local ctrl_v = vim.api.nvim_replace_termcodes('<C-v>', true, true, true)
-  local ctrl_s = vim.api.nvim_replace_termcodes('<C-s>', true, true, true)
 
   -- stylua: ignore
-  local mode_names = {
-    -- TODO: refactor characters
-    n = 'Ω',    -- navigation / normal
-    no = '∗',   -- operator pending
-    nov = '∗',
-    noV = '∗',
-    ['no' .. ctrl_v] = '∗',
-    niI = 'Ω·ι',
-    niR = 'Ω·ρ',
-    niV = 'Ω·ν',
-    nt = 'τ·∇',
+  local modes = {
+    ['n']           = { 'Ω',  'MiniStatuslineModeNormal' },
+    ['niI']         = { 'Ω',  'MiniStatuslineModeNormal' },
+    ['niR']         = { 'Ω',  'MiniStatuslineModeNormal' },
+    ['niV']         = { 'Ω',  'MiniStatuslineModeNormal' },
 
-    i = 'ζ', -- insert
-    ic = 'ζ',
-    ix = 'ζ',
+    ['no']          = { '∗',  'MiniStatuslineModeNormal' },
+    ['nov']         = { '∗',  'MiniStatuslineModeNormal' },
+    ['noV']         = { '∗',  'MiniStatuslineModeNormal' },
+    ['no'..ctrl_v]  = { '∗',  'MiniStatuslineModeNormal' },
 
-    v = '◉ ', -- visual
-    V = '◈ ', -- visual line
-    [ctrl_v] = '▣ ', -- visual block
+    ['i']           = { '𝜁',  'MiniStatuslineModeInsert' },
+    ['ic']          = { '𝜁',  'MiniStatuslineModeInsert' },
+    ['ix']          = { '𝜁',  'MiniStatuslineModeInsert' },
 
-    s = '◉ ′', -- select
-    S = '◈ ′',
-    [ctrl_s] = '▣ ′',
+    ['v']           = { '◉ ', 'MiniStatuslineModeVisual' },
+    ['V']           = { '◈ ', 'MiniStatuslineModeVisual' },
+    [ctrl_v]        = { '▣ ', 'MiniStatuslineModeVisual' },
 
-    R = 'ρ', -- replace
-    Rc = 'ρ',
-    Rx = 'ρ',
+    ['R']           = { 'ρ',  'MiniStatuslineModeReplace' },
+    ['Rc']          = { 'ρ',  'MiniStatuslineModeReplace' },
+    ['Rx']          = { 'ρ',  'MiniStatuslineModeReplace' },
+    ['Rv']          = { 'ρᵥ', 'MiniStatuslineModeReplace' },
+    ['Rvc']         = { 'ρᵥ', 'MiniStatuslineModeReplace' },
+    ['Rvx']         = { 'ρᵥ', 'MiniStatuslineModeReplace' },
 
-    Rv = 'ρᵥ',
-    Rvc = 'ρᵥ',
-    Rvx = 'ρᵥ',
-
-    c = 'λ', -- command
-    cv = 'λ',
-    ce = 'λ',
-
-    r = '?',
-    rm = '…',
-    ['r?'] = '⁇',
-
-    ['!'] = 'λ', -- shell
-    t = 'τ', -- terminal
+    ['c']           = { 'λ',  'MiniStatuslineModeCommand' },
+    ['cr']          = { 'λ',  'MiniStatuslineModeCommand' },
+    ['cv']          = { 'λ',  'MiniStatuslineModeCommand' },
+    ['cvr']         = { 'λ',  'MiniStatuslineModeCommand' },
   }
 
-  local function section_mode_riced()
-    local _, mode_hl = MiniStatusline.section_mode { trunc_width = 120 }
+  local function section_mode()
     local raw_mode = vim.fn.mode(1)
-
-    return mode_names[raw_mode] or raw_mode:upper(), mode_hl
+    local ch, hl = unpack(modes[raw_mode] or { '?', 'MiniStatuslineModeOther' })
+    return ch, hl
   end
 
   -- stylua: ignore
   local function get_content_active()
-    local mode, mode_hl = section_mode_riced()
+    local mode, mode_hl = section_mode()
     local git           = MiniStatusline.section_git({ trunc_width = 40 })
     local diff          = MiniStatusline.section_diff({ trunc_width = 75 })
     local diagnostics   = MiniStatusline.section_diagnostics({ trunc_width = 75 })
