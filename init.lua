@@ -245,6 +245,8 @@ require('conform').setup {
 }
 
 -- Syntax highlighting via treesitter
+-- TODO: investigate Snacks.picker.grep() bug with tree-sitter regex parser
+-- require('nvim-treesitter').install { 'cpp', 'rust', 'zig', 'regex' }
 require('nvim-treesitter').install { 'cpp', 'rust', 'zig' }
 vim.api.nvim_create_autocmd('FileType', {
   callback = function(args)
@@ -292,6 +294,7 @@ do
   end
 
   local function yank_whole_buffer()
+    -- TODO: refactor again, use commands :%y +
     local reg = vim.v.register
     if reg == '"' then
       reg = '+'
