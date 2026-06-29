@@ -1,3 +1,11 @@
+-- TODO: Highlight TODO comments (only inside comments)
+-- TODO: Check spelling
+-- TODO: Fix problems with buffer delete
+-- TODO: Fix modus theme colors (this is a big task)
+-- TODO: Harpoon (javelin.el-like behavior)
+-- TODO: Integrate OS trash
+-- TODO: set vim.g.has_nerd_font only if using neovide, should I???
+
 -- Neovim options
 vim.g.have_nerd_font = true
 vim.opt.number = true
