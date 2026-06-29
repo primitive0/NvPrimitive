@@ -222,6 +222,9 @@ require('mini.ai').setup {}
 -- mini.operators
 require('mini.operators').setup {}
 
+-- mini.align
+require('mini.align').setup {}
+
 -- Automatic code formatting
 require('conform').setup {
   formatters_by_ft = {
