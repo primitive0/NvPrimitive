@@ -153,20 +153,6 @@ do
   }
 end
 
--- Set colorcolumn depending on textwidth
-vim.api.nvim_create_autocmd({ 'BufEnter', 'OptionSet' }, {
-  pattern = { '*', 'textwidth' },
-  callback = function()
-    local textwidth = vim.bo.textwidth
-    vim.wo.colorcolumn = textwidth > 0 and tostring(textwidth + 1) or ''
-  end,
-})
-
--- Набор на русском языке
-vim.opt.keymap = 'russian-jcukenwin'
-vim.opt.iminsert = 0
-vim.opt.imsearch = 0
-
 -- Picker
 require('snacks').setup {
   picker = {
@@ -210,6 +196,11 @@ require('snacks').setup {
   },
 }
 
+-- Набор на русском языке
+vim.opt.keymap = 'russian-jcukenwin'
+vim.opt.iminsert = 0
+vim.opt.imsearch = 0
+
 -- mini.surround
 require('mini.surround').setup {}
 
@@ -244,6 +235,23 @@ require('conform').setup {
   end,
 }
 
+-- Highlight yanked text
+vim.api.nvim_create_autocmd('TextYankPost', {
+  group = vim.api.nvim_create_augroup('MyHighlightYank', { clear = true }),
+  callback = function()
+    vim.hl.on_yank()
+  end,
+})
+
+-- Set colorcolumn depending on textwidth
+vim.api.nvim_create_autocmd({ 'BufEnter', 'OptionSet' }, {
+  pattern = { '*', 'textwidth' },
+  callback = function()
+    local textwidth = vim.bo.textwidth
+    vim.wo.colorcolumn = textwidth > 0 and tostring(textwidth + 1) or ''
+  end,
+})
+
 -- Syntax highlighting via treesitter
 -- TODO: investigate Snacks.picker.grep() bug with tree-sitter regex parser
 -- require('nvim-treesitter').install { 'cpp', 'rust', 'zig', 'regex' }
@@ -270,14 +278,6 @@ vim.lsp.config('clangd', {
   },
 })
 vim.lsp.enable 'clangd'
-
--- Autocommands
-vim.api.nvim_create_autocmd('TextYankPost', {
-  group = vim.api.nvim_create_augroup('my-highlight-yank', { clear = true }),
-  callback = function()
-    vim.hl.on_yank()
-  end,
-})
 
 -- Key mappings
 do
