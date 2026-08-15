@@ -101,9 +101,9 @@ do
     ['noV']         = { '∗',  'MiniStatuslineModeNormal' },
     ['no'..ctrl_v]  = { '∗',  'MiniStatuslineModeNormal' },
 
-    ['i']           = { '𝜁',  'MiniStatuslineModeInsert' },
-    ['ic']          = { '𝜁',  'MiniStatuslineModeInsert' },
-    ['ix']          = { '𝜁',  'MiniStatuslineModeInsert' },
+    ['i']           = { 'ζ',  'MiniStatuslineModeInsert' },
+    ['ic']          = { 'ζ',  'MiniStatuslineModeInsert' },
+    ['ix']          = { 'ζ',  'MiniStatuslineModeInsert' },
 
     ['v']           = { '◉ ', 'MiniStatuslineModeVisual' },
     ['V']           = { '◈ ', 'MiniStatuslineModeVisual' },
